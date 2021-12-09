@@ -76,6 +76,7 @@ public class MainManager : MonoBehaviour
     {
         DataManager.Instance.CheckForNewHighScore(m_Points);
         ScoreboardUpdate();
+        DataManager.Instance.SaveScore();
         m_GameOver = true;
         GameOverText.SetActive(true);
     }

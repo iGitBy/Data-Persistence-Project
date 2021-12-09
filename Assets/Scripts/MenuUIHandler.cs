@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class MenuUIHandler : MonoBehaviour
 {
@@ -12,6 +15,7 @@ public class MenuUIHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        DataManager.Instance.LoadScore();
         highScoreDisplay.text = "Best Score: " + DataManager.Instance.highScorerName + ": " + DataManager.Instance.highScore;
     }
 
@@ -42,5 +46,15 @@ public class MenuUIHandler : MonoBehaviour
             SubmitName();
         }
     }*/
+
+    public void Quit()
+    {
+#if UNITY_EDITOR
+        EditorApplication.ExitPlaymode();
+#else
+        Application.Quit();
+
+#endif
+    }
 
 }
