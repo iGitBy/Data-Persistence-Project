@@ -35,7 +35,7 @@ public class DataManager : MonoBehaviour
             {
                 SaveData rank = new SaveData();
                 rank.highScore = 0;
-                rank.highScorerName = " -empty- ";
+                rank.highScorerName = " - empty - ";
                 leaderboardRanks.Add(rank);
             }
         }
@@ -68,7 +68,7 @@ public class DataManager : MonoBehaviour
                 leaderboardRanks.Insert(i, newRank);
 
                 //make sure to bump the last-place score off the leaderboard!
-                leaderboardRanks.RemoveAt(9);
+                leaderboardRanks.RemoveAt(10);
 
                 return;
             }
@@ -182,6 +182,14 @@ public class DataManager : MonoBehaviour
             string json = JsonUtility.ToJson(data);
 
             File.WriteAllText(Application.persistentDataPath + "/savefile" + i + ".json", json);
+        }
+    }
+
+    void DebugTester()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("TESTING");
         }
     }
 }
