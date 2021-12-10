@@ -13,6 +13,12 @@ public class DataManager : MonoBehaviour
 
     public int highScore = 0;
 
+    public int numberOfRanks = 10;
+
+    public bool deletedSaveData = false;
+
+    public List<SaveData> leaderboardRanks;
+
     private void Awake()
     {
         if(Instance != null)
@@ -24,6 +30,14 @@ public class DataManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(this);
+
+            for(int i=0; i<numberOfRanks; i++)
+            {
+                SaveData rank = new SaveData();
+                rank.highScore = 0;
+                rank.highScorerName = " -empty- ";
+                leaderboardRanks.Add(rank);
+            }
         }
     }
 
@@ -42,8 +56,28 @@ public class DataManager : MonoBehaviour
 
     }
 
+    public void CheckForRank(int newScore)
+    {
+        for(int i = 0; i<leaderboardRanks.Count; i++)
+        {
+            if(newScore >= leaderboardRanks[i].highScore)
+            {
+                SaveData newRank = new SaveData();
+                newRank.highScore = newScore;
+                newRank.highScorerName = newName;
+                leaderboardRanks.Insert(i, newRank);
+
+                //make sure to bump the last-place score off the leaderboard!
+                leaderboardRanks.RemoveAt(9);
+
+                return;
+            }
+        }
+
+    }
+
     [System.Serializable]
-    class SaveData
+    public class SaveData
     {
         public int highScore;
         public string highScorerName;
@@ -58,6 +92,20 @@ public class DataManager : MonoBehaviour
         string json = JsonUtility.ToJson(data);
 
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+
+    public void SaveLeaderboard()
+    {
+        for(int i = 0; i < leaderboardRanks.Count; i++)
+        {
+            SaveData data = new SaveData();
+            data.highScore = leaderboardRanks[i].highScore;
+            data.highScorerName = leaderboardRanks[i].highScorerName;
+
+            string json = JsonUtility.ToJson(data);
+
+            File.WriteAllText(Application.persistentDataPath + "/savefile" + i + ".json", json);
+        }
     }
 
     public void LoadScore()
@@ -76,6 +124,64 @@ public class DataManager : MonoBehaviour
         else
         {
             return;
+        }
+    }
+
+    public void LoadLeaderboard()
+    {
+        for (int i = 0; i < leaderboardRanks.Count; i++)
+        {
+            string path = Application.persistentDataPath + "/savefile" + i + ".json";
+
+            if (File.Exists(path))
+            {
+                string json = File.ReadAllText(path);
+
+                SaveData data = JsonUtility.FromJson<SaveData>(json);
+
+                leaderboardRanks[i].highScore = data.highScore;
+                leaderboardRanks[i].highScorerName = data.highScorerName;
+            }
+        }
+
+    }
+
+    public void DeleteSaveData()
+    {
+        highScore = 0;
+        highScorerName = " - empty - ";
+        deletedSaveData = true;
+
+
+        SaveData data = new SaveData();
+        data.highScore = highScore;
+        data.highScorerName = highScorerName;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefile.json", json);
+    }
+
+    public void DeleteLeaderboard()
+    {
+        deletedSaveData = true;
+
+        for(int i = 0; i < leaderboardRanks.Count; i++)
+        {
+            leaderboardRanks[i].highScore = 0;
+            leaderboardRanks[i].highScorerName = " - empty - ";
+        }
+
+
+        for (int i = 0; i < leaderboardRanks.Count; i++)
+        {
+            SaveData data = new SaveData();
+            data.highScore = leaderboardRanks[i].highScore;
+            data.highScorerName = leaderboardRanks[i].highScorerName;
+
+            string json = JsonUtility.ToJson(data);
+
+            File.WriteAllText(Application.persistentDataPath + "/savefile" + i + ".json", json);
         }
     }
 }

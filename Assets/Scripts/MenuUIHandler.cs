@@ -15,8 +15,10 @@ public class MenuUIHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        DataManager.Instance.LoadScore();
-        highScoreDisplay.text = "Best Score: " + DataManager.Instance.highScorerName + ": " + DataManager.Instance.highScore;
+        //DataManager.Instance.LoadScore();
+        DataManager.Instance.LoadLeaderboard();
+        //highScoreDisplay.text = "Best Score: " + DataManager.Instance.highScorerName + ": " + DataManager.Instance.highScore;
+        highScoreDisplay.text = "Best Score: " + DataManager.Instance.leaderboardRanks[0].highScorerName + ": " + DataManager.Instance.leaderboardRanks[0].highScore;
     }
 
     // Update is called once per frame
@@ -29,6 +31,11 @@ public class MenuUIHandler : MonoBehaviour
     {
         SubmitName();
         SceneManager.LoadScene(1);
+    }
+
+    public void GoToLeaderboard()
+    {
+        SceneManager.LoadScene(2);
     }
 
     public void SubmitName()

@@ -74,15 +74,18 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
-        DataManager.Instance.CheckForNewHighScore(m_Points);
+        //DataManager.Instance.CheckForNewHighScore(m_Points);
+        DataManager.Instance.CheckForRank(m_Points);
         ScoreboardUpdate();
-        DataManager.Instance.SaveScore();
+        //DataManager.Instance.SaveScore();
+        DataManager.Instance.SaveLeaderboard();
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
 
     public void ScoreboardUpdate()
     {
-        BestScoreText.text = "Best Score: " + DataManager.Instance.highScorerName + ": " + DataManager.Instance.highScore;
+        //BestScoreText.text = "Best Score: " + DataManager.Instance.highScorerName + ": " + DataManager.Instance.highScore;
+        BestScoreText.text = "Best Score: " + DataManager.Instance.leaderboardRanks[0].highScorerName + ": " + DataManager.Instance.leaderboardRanks[0].highScore;
     }
 }
