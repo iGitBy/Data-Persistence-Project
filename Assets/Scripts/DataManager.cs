@@ -15,9 +15,16 @@ public class DataManager : MonoBehaviour
 
     public int numberOfRanks = 10;
 
+    public int difficultyLevel; // 0 is Easy, 1 is Normal, and 2 is HARD -- find in SettingsUIHandler
+
     public bool deletedSaveData = false;
 
     public List<SaveData> leaderboardRanks;
+
+    //Difficulty Settings
+
+    [SerializeField] public float maximumVelocity;
+    [SerializeField] public float startSpeed;
 
     private void Awake()
     {
@@ -31,6 +38,7 @@ public class DataManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(this);
 
+           //initialize leaderboard values
             for(int i=0; i<numberOfRanks; i++)
             {
                 SaveData rank = new SaveData();
@@ -38,6 +46,9 @@ public class DataManager : MonoBehaviour
                 rank.highScorerName = " - empty - ";
                 leaderboardRanks.Add(rank);
             }
+
+            //start at NORMAL difficulty
+            difficultyLevel = 1;
         }
     }
 
@@ -82,6 +93,7 @@ public class DataManager : MonoBehaviour
         public int highScore;
         public string highScorerName;
     }
+
 
     public void SaveScore()
     {
@@ -192,4 +204,60 @@ public class DataManager : MonoBehaviour
             Debug.Log("TESTING");
         }
     }
+
+    //--------DIFFICULTY SETTINGS-----------
+
+    public void EasyMode()
+    {
+        difficultyLevel = 0;
+        maximumVelocity = 2;
+        startSpeed = 1;
+    }
+
+    public void NormalMode()
+    {
+        difficultyLevel = 1;
+        maximumVelocity = 3;
+        startSpeed = 2;
+    }
+
+    public void HardMode()
+    {
+        difficultyLevel = 2;
+        maximumVelocity = 4;
+        startSpeed = 3;
+    }
+
+    [System.Serializable]
+    public class SettingsData
+    {
+        public int difficulty;
+    }
+
+    public void SaveSettings()
+    {
+        SettingsData data = new SettingsData();
+        data.difficulty = difficultyLevel;
+
+        string json = JsonUtility.ToJson(data);
+
+        File.WriteAllText(Application.persistentDataPath + "/savefileSETTINGS.json", json);
+    }
+
+    public void LoadSettings()
+    {
+        string path = Application.persistentDataPath + "/savefileSETTINGS.json";
+
+        if (File.Exists(path))
+        {
+            string json = File.ReadAllText(path);
+
+            SettingsData data = JsonUtility.FromJson<SettingsData>(json);
+
+            difficultyLevel = data.difficulty;
+        }
+    }
+
+
+
 }

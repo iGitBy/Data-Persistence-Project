@@ -13,12 +13,15 @@ public class MainManager : MonoBehaviour
     public Text ScoreText;
     public Text BestScoreText;
     public GameObject GameOverText;
-    
+    [SerializeField] private Button returnToMenuButton;
+    [SerializeField] private GameObject gameOverBackground;
+
     private bool m_Started = false;
     private int m_Points;
     
     private bool m_GameOver = false;
 
+    //[SerializeField] private float speed = 3.0f; // og was 2
     
     // Start is called before the first frame update
     void Start()
@@ -53,7 +56,7 @@ public class MainManager : MonoBehaviour
                 forceDir.Normalize();
 
                 Ball.transform.SetParent(null);
-                Ball.AddForce(forceDir * 2.0f, ForceMode.VelocityChange);
+                Ball.AddForce(forceDir * DataManager.Instance.startSpeed, ForceMode.VelocityChange);
             }
         }
         else if (m_GameOver)
@@ -81,11 +84,18 @@ public class MainManager : MonoBehaviour
         DataManager.Instance.SaveLeaderboard();
         m_GameOver = true;
         GameOverText.SetActive(true);
+        returnToMenuButton.gameObject.SetActive(true);
+        gameOverBackground.gameObject.SetActive(true);
     }
 
     public void ScoreboardUpdate()
     {
         //BestScoreText.text = "Best Score: " + DataManager.Instance.highScorerName + ": " + DataManager.Instance.highScore;
         BestScoreText.text = "Best Score: " + DataManager.Instance.leaderboardRanks[0].highScorerName + ": " + DataManager.Instance.leaderboardRanks[0].highScore;
+    }
+
+    public void GoToMainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

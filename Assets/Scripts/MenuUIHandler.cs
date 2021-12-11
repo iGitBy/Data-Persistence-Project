@@ -17,6 +17,7 @@ public class MenuUIHandler : MonoBehaviour
     {
         //DataManager.Instance.LoadScore();
         DataManager.Instance.LoadLeaderboard();
+        DataManager.Instance.LoadSettings();
         //highScoreDisplay.text = "Best Score: " + DataManager.Instance.highScorerName + ": " + DataManager.Instance.highScore;
         highScoreDisplay.text = "Best Score: " + DataManager.Instance.leaderboardRanks[0].highScorerName + ": " + DataManager.Instance.leaderboardRanks[0].highScore;
     }
@@ -36,6 +37,11 @@ public class MenuUIHandler : MonoBehaviour
     public void GoToLeaderboard()
     {
         SceneManager.LoadScene(2);
+    }
+
+    public void GoToSettings()
+    {
+        SceneManager.LoadScene(3);
     }
 
     public void SubmitName()

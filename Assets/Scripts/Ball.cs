@@ -7,6 +7,8 @@ public class Ball : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;
 
+    //[SerializeField] private float maximumVelocity = 3.0f; // og was 3
+
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -26,9 +28,9 @@ public class Ball : MonoBehaviour
         }
 
         //max velocity
-        if (velocity.magnitude > 3.0f)
+        if (velocity.magnitude > DataManager.Instance.maximumVelocity)
         {
-            velocity = velocity.normalized * 3.0f;
+            velocity = velocity.normalized * DataManager.Instance.maximumVelocity;
         }
 
         m_Rigidbody.velocity = velocity;
